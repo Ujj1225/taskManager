@@ -7,7 +7,9 @@ const postTasks = (req, res) => {
 };
 
 const getOneTask = (req, res) => {
-  res.send(`The one task you are looking for is ${req.params.id}`);
+  res.json({
+    id: req.params.id
+  });
 };
 
 const updateTasks = (req, res) => {
