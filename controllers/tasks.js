@@ -1,14 +1,23 @@
+// Using models in controllers
+// Instance of a model is document
+const Task = require("../models/task");
+
 const getAllTasks = (req, res) => {
   res.send("Fetching all items");
 };
 
-const postTasks = (req, res) => {
-  res.send("posting items");
+const postTasks = async (req, res) => {
+  const {name, completed} = req.body;
+  const task = await Task.create({
+    name, 
+    completed
+  });
+  res.status(201).send(task);
 };
 
 const getOneTask = (req, res) => {
   res.json({
-    id: req.params.id
+    id: req.params.id,
   });
 };
 
