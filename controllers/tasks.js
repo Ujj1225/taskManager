@@ -35,18 +35,29 @@ const getOneTask = async (req, res) => {
     const { id: taskId } = req.params;
     // We always check for _id becuase thats what mongo provides as default
     const spTask = await Task.findOne({ _id: taskId });
-    res.status(200).json({ spTask });
+    if(!spTask){
+      res.status(404).json({ spTask, message: 'No id with given parameter' });
+
+    }
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       attempt: "Successful!",
       message: "NOT A VALID ID",
     });
   }
 };
 
-const updateTasks = (req, res) => {
-  res.send(`The task you are trying to update is ${req.params.id}`);
+// Updating task
+const updateTasks = async (req, res) => {
+  try {
+    const { id: taskId } = req.params;
+    res.status(200).json({ id: taskId, data: req.body });
+  } catch (error) {
+    // Handle errors here if needed.
+    res.status(500).json({ error: "An error occurred" });
+  }
 };
+
 
 const deleteTasks = async (req, res) => {
   try {
@@ -57,7 +68,7 @@ const deleteTasks = async (req, res) => {
         msg: `No task with id: ${taskId}`,
       });
     }
-    res.status(200).json({spTask});
+    res.status(200).json({ spTask });
   } catch (error) {
     res.status(500).json({ message: error });
   }
