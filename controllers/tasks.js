@@ -52,9 +52,13 @@ const updateTasks = async (req, res) => {
   try {
     // Here if we dont set up options we will get old value when returning json
     // Plus even if in our model we defined required: true, the empty name would also be accepted
-    // Hence we use options
+    // Hence we use options::> the third parameter in findbyidandupdate
     const { id: taskId } = req.params;
-    const spTask = await Task.findByIdAndUpdate({_id: taskId}, req.body)
+    const spTask = await Task.findByIdAndUpdate({_id: taskId}, req.body,
+      {
+        new: true, 
+        runValidators: true,
+      })
     if(!spTask){
       return res.status(404).json({msg: `No task with id: ${taskId}`});
     }

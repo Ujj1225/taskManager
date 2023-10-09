@@ -1,12 +1,7 @@
 const mongoose = require("mongoose");
 
-const connectionString =
-  "mongodb+srv://ujjwaljha1225:ujjwal@taskmanager.rgg9u36.mongodb.net/taskManager?retryWrites=true&w=majority";
-
-
   const connectDB = (url) =>{
-    return mongoose.connect(connectionString, {
-      useCreateindex: true,
+    return mongoose.connect(url, {
       useUnifiedTopology: true,
       useFindAndModify: false,
       useNewUrlParser: true,
