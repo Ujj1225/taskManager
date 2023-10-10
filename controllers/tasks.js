@@ -1,4 +1,5 @@
 const asyncWrapper = require("../middleware/async");
+const {createCustomError} = require('../errors/custom-error');
 // Using models in controllers
 // Instance of a model is document
 const Task = require("../models/task");
@@ -20,13 +21,11 @@ const postTasks = asyncWrapper(async (req, res) => {
   res.status(201).json({ task });
 });
 
-const getOneTask = asyncWrapper(async (req, res) => {
+const getOneTask = asyncWrapper(async (req, res, next) => {
   const { id: taskId } = req.params;
   const spTask = await Task.findOne({ _id: taskId });
   if (!spTask) {
-    return res
-      .status(404)
-      .json({ spTask, message: "No id with given parameter" });
+    return next(createCustomError(`No task with id: ${taskId}`, 404))
   }
   return res.status(200).json({ spTask });
 });
@@ -42,7 +41,8 @@ const updateTasks = asyncWrapper(async (req, res) => {
     runValidators: true,
   });
   if (!spTask) {
-    return res.status(404).json({ msg: `No task with id: ${taskId}` });
+        return next(createCustomError(`No task with id: ${taskId}`, 404));
+
   }
   res.status(200).json({ spTask });
 });
@@ -51,9 +51,7 @@ const deleteTasks = asyncWrapper(async (req, res) => {
   const { id: taskId } = req.params;
   const spTask = await Task.findOneAndDelete({ _id: taskId });
   if (!spTask) {
-    return res.status(404).json({
-      msg: `No task with id: ${taskId}`,
-    });
+        return next(createCustomError(`No task with id: ${taskId}`, 404));
   }
   return res.status(200).json({ spTask });
 });
