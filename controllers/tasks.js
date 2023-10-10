@@ -1,20 +1,15 @@
+const asyncWrapper = require('../middleware/async');
 // Using models in controllers
 // Instance of a model is document
 const Task = require("../models/task");
 
-const getAllTasks = async (req, res) => {
-  try {
+const getAllTasks = asyncWrapper(async (req, res) => {
     // .find({}) gets all the documents of collection
     const task = await Task.find({});
     res.status(200).json({task});
     // res.status(200).json({ status: "success", data: {task, nbHits: task.length}});
     // This too is a way how we can set up our response where task.length is the total no of tasks
-  } catch (error) {
-    res.status(500).json({
-      message: "could not fetch all tasks",
-    });
-  }
-};
+})
 
 const postTasks = async (req, res) => {
   try {
