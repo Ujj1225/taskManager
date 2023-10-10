@@ -31,21 +31,22 @@ const postTasks = async (req, res) => {
 
 const getOneTask = async (req, res) => {
   try {
-    // The below statement provides the id alias as taskId
     const { id: taskId } = req.params;
-    // We always check for _id becuase thats what mongo provides as default
     const spTask = await Task.findOne({ _id: taskId });
-    if(!spTask){
-      res.status(404).json({ spTask, message: 'No id with given parameter' });
-
+    if (!spTask) {
+      return res
+        .status(404)
+        .json({ spTask, message: "No id with given parameter" });
     }
+    return res.status(200).json({ spTask });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       attempt: "Successful!",
       message: "NOT A VALID ID",
     });
   }
 };
+
 
 // Updating task
 const updateTasks = async (req, res) => {
@@ -54,21 +55,19 @@ const updateTasks = async (req, res) => {
     // Plus even if in our model we defined required: true, the empty name would also be accepted
     // Hence we use options::> the third parameter in findbyidandupdate
     const { id: taskId } = req.params;
-    const spTask = await Task.findByIdAndUpdate({_id: taskId}, req.body,
-      {
-        new: true, 
-        runValidators: true,
-      })
-    if(!spTask){
-      return res.status(404).json({msg: `No task with id: ${taskId}`});
+    const spTask = await Task.findByIdAndUpdate({ _id: taskId }, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!spTask) {
+      return res.status(404).json({ msg: `No task with id: ${taskId}` });
     }
-    res.status(200).json({spTask});
+    res.status(200).json({ spTask });
   } catch (error) {
     // Handle errors here if needed.
     res.status(500).json({ error: "An error occurred" });
   }
 };
-
 
 const deleteTasks = async (req, res) => {
   try {
@@ -79,7 +78,7 @@ const deleteTasks = async (req, res) => {
         msg: `No task with id: ${taskId}`,
       });
     }
-    res.status(200).json({ spTask });
+    return res.status(200).json({ spTask });
   } catch (error) {
     res.status(500).json({ message: error });
   }
