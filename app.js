@@ -5,6 +5,7 @@ const connectDb = require('./db/connect');
 require('dotenv').config();
 const port = 3000
 const notFound = require('./middleware/not-found');
+const errorHandlerMiddleware = require('./middleware/errorhandler');
 
 // middleware
 app.use(express.json());
@@ -17,6 +18,8 @@ app.use(express.static('./public'))
 app.use('/api/v1/tasks', tasks);
 // Middleware for not found
 app.use(notFound);
+// Middleware for handling errors
+app.use(errorHandlerMiddleware);
 
 // First checking database connection and only if db is connected then we connect to server
 // ConnectDb returns a promise; dont forget! so yeah async await
