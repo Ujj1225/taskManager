@@ -6,7 +6,8 @@ const getAllTasks = async (req, res) => {
   try {
     // .find({}) gets all the documents of collection
     const task = await Task.find({});
-    res.status(200).json({ status: "success", data: {task, nbHits: task.length}});
+    res.status(200).json({task});
+    // res.status(200).json({ status: "success", data: {task, nbHits: task.length}});
     // This too is a way how we can set up our response where task.length is the total no of tasks
   } catch (error) {
     res.status(500).json({
